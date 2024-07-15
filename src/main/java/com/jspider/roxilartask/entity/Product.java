@@ -2,12 +2,14 @@ package com.jspider.roxilartask.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@Data
 public class Product {
 	@Id
 	private int id;
@@ -17,12 +19,5 @@ public class Product {
 	private String category;
 	private String image;
 	private boolean dateOfSale;
-	public String getDateOfSale() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public double getPrice() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
 }

@@ -16,4 +16,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer>{
 	@Query(value = "SELECT product FROM Product product WHERE product.title LIKE %:search%")
 	List<Product> findProductsByTitleOrDescription(String search);
 
+	@Query("SELECT p FROM Product p WHERE FUNCTION('MONTH',p.dateOfSale) = :month")
+	List<Product> findProductsByMonth(int parseInt);
+
 }

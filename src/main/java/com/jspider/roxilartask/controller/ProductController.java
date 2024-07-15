@@ -43,16 +43,17 @@ public class ProductController {
 	}
 	
 	@GetMapping (path = "/stats")
-	public void getStats(@RequestParam(name = "month") String month) {
+	public double[] getStats(@RequestParam(name = "month") String month) {
 		double totleSaleAmount = 0;
 		int sold = 0;
 		int unsold = 0;
 		List<Product> products = productRepo.findAll();
 		for (Product product : products) {
 			if(product.getDateOfSale().contains("-"+month+"-")) {
-				sold++;
-				totleSaleAmount+= product.getPrice();
-			}else {
+				if(product.isSold()) {
+					sold++;
+					totleSaleAmount += product.getPrice();
+				}else {
 				unsold++;
 			}
 		}
@@ -65,7 +66,7 @@ public class ProductController {
 }
 
 @GetMapping(path = "/bar-chart")
-public Map<String, Integer> getBarChart (@RequestParam(name = "month") String month) {
+public Map<String, Integer> getBarChart(@RequestParam(name = "month") String month) {
 	List<Product> products = productRepo.findAll();
 	int [] a=new int[10];
 	for (Product product : products) {
@@ -108,4 +109,17 @@ public Map<String, Integer> getBarChart (@RequestParam(name = "month") String mo
 	
 	return map;
 }
+
+@GetMapping("/categories/pie-chart")
+public Map<String, Integer> getCategoryCountsForMonth (@RequestParam (name = "month") String month) {
+	List<Product> products = productRepo.findProductsByMonth(Integer.parseInt(month));
+	Map<String, Integer> categoryCount = new HashMap<>();
+	
+	for(Product product : products) {
+		String category = product.getCategory();
+		categoryCount.put(category, categoryCount.getOrDefault(category, 0)+1);
+	}
+	
+	return categoryCount;
+  }
 }
